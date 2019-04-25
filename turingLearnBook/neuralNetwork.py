@@ -64,5 +64,17 @@ plt.plot(x, y)
 plt.ylim(-0.1, 1.1)
 plt.show()
 
+
 # 阶跃函数和sigmoid函数都是非线性函数
 # 激活函数必须使用非线性函数
+
+# ReLU函数 rectified linear unit
+# ReLU在输入大雨0时，直接输出该值；在输入小于0时，输出0
+def relu(x):
+    return np.maximum(0, x)
+
+
+r = np.arange(-5.0, 5.0, 0.1)
+u = relu(r)
+plt.plot(r, u)
+plt.show()
