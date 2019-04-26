@@ -1,5 +1,6 @@
 # coding: utf-8
 import sys, os
+
 sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
 import numpy as np
 import pickle
@@ -13,7 +14,7 @@ def get_data():
 
 
 def init_network():
-    with open("sample_weight.pkl", 'rb') as f:
+    with open("sample_weight.pkl", 'rb') as f:  # 读入保存在pickle文件sample_weight.pkl文件中的权重参数
         network = pickle.load(f)
     return network
 
@@ -37,8 +38,11 @@ network = init_network()
 accuracy_cnt = 0
 for i in range(len(x)):
     y = predict(network, x[i])
-    p= np.argmax(y) # 获取概率最高的元素的索引
+    p = np.argmax(y)  # 获取概率最高的元素的索引
     if p == t[i]:
         accuracy_cnt += 1
 
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+
+# 对神经网络的输入数据进行某种既定的转换称为预处理pre-processing，
+# 使用normalize将各个像素值除以255，使得数据的值在0.0~1.0的范围内，像这样把数据限定到某个范围内的处理叫正规化

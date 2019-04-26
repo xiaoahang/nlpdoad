@@ -1,5 +1,6 @@
 # coding: utf-8
 import sys, os
+
 sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
 import numpy as np
 import pickle
@@ -35,13 +36,15 @@ def predict(network, x):
 x, t = get_data()
 network = init_network()
 
-batch_size = 100 # 批数量
+batch_size = 100  # 批数量
 accuracy_cnt = 0
 
 for i in range(0, len(x), batch_size):
-    x_batch = x[i:i+batch_size]
+    x_batch = x[i:i + batch_size]
     y_batch = predict(network, x_batch)
     p = np.argmax(y_batch, axis=1)
-    accuracy_cnt += np.sum(p == t[i:i+batch_size])
+    accuracy_cnt += np.sum(p == t[i:i + batch_size])
 
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
+
+# range函数 range(start,end,step) 生成由start到end-1之间的，间隔为step的列表
