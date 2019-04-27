@@ -1,7 +1,7 @@
 # coding: utf-8
-from and_gate import AND
-from or_gate import OR
-from nand_gate import NAND
+from ch02.and_gate import AND
+from ch02.or_gate import OR
+from ch02.nand_gate import NAND
 
 
 def XOR(x1, x2):
