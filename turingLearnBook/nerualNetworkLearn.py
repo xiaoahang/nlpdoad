@@ -109,3 +109,6 @@ def gradient_descent(f, init_x, lr=0.01, step_num=100):
 init_x = np.array([-3.0, 4.0])
 G = gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100)
 print(G)
+
+# 神经网络的梯度
+

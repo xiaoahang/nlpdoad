@@ -18,7 +18,7 @@ def _numerical_gradient_1d(f, x):
         
     return grad
 
-
+# 梯度
 def numerical_gradient_2d(f, X):
     if X.ndim == 1:
         return _numerical_gradient_1d(f, X)
@@ -30,7 +30,7 @@ def numerical_gradient_2d(f, X):
         
         return grad
 
-
+# 梯度
 def numerical_gradient(f, x):
     h = 1e-4 # 0.0001
     grad = np.zeros_like(x)
