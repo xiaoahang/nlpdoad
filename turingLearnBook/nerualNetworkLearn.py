@@ -15,7 +15,11 @@ def mean_squared_error(y, t):
 
 t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 # 设 2 为正确解
-y = [0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]
+y = np.array([0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0])
+print(np.ndim(y))
+print(y)
+y = y.reshape(1, y.size)
+print(y)
 M = mean_squared_error(np.array(y), np.array(t))
 print(M)
 
@@ -54,3 +58,54 @@ def batch_cross_entropy_error_normalize(y, t):
     batch_size = y.shape[0]
     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 
+
+# 导数的实现
+# 不好的实现 数值微分
+
+def numerical_diff(f, x):
+    h = 10e-50
+    return (f(x + h) - f(x - h)) / (2 * h)
+
+
+# 梯度的实现
+def numerical_gradient(f, x):
+    h = 1e-4  # 0.0001
+    grad = np.zeros_like(x)  # 生成和x形状相同的数组
+
+    for idx in range(x.size):
+        tmp_val = x[idx]
+        # f(x+h)的计算
+        x[idx] = tmp_val + h
+        fxh1 = f(x)
+
+        # f(x-h)的计算
+        x[idx] = tmp_val - h
+        fxh2 = f(x)
+
+        grad[idx] = (fxh1 - fxh2) / (2 * h)
+        x[idx] = tmp_val  # 还原值
+    return grad
+
+
+def function_2(x):
+    return x[0] ** 2 + x[1] ** 2
+
+
+n1 = numerical_gradient(function_2, np.array([3.0, 4.0]))
+n2 = numerical_gradient(function_2, np.array([0.0, 2.0]))
+n3 = numerical_gradient(function_2, np.array([3.0, 0.0]))
+print(n1, n2, n3)
+
+
+# 梯度下降法
+def gradient_descent(f, init_x, lr=0.01, step_num=100):
+    x = init_x
+    for i in range(step_num):
+        grad = numerical_gradient(f, x)
+        x -= lr * grad
+    return x
+
+
+init_x = np.array([-3.0, 4.0])
+G = gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100)
+print(G)
