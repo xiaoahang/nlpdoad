@@ -7,3 +7,4 @@
 *.sln
 *.sw*
 .DS_Store
+*.py[cod]
