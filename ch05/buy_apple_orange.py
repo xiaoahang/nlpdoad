@@ -1,5 +1,5 @@
 # coding: utf-8
-from layer_naive import *
+from ch05.layer_naive import *
 
 apple = 100
 apple_num = 2
