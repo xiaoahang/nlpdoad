@@ -8,21 +8,24 @@ from turingLearnBook.two_layer_net import TwoLayerNet
 
 # 这里，mini-batch的大小为100，需要梅西从60000个训练数据中随机取出100哥数据（图像数据和正确解标签数据）。然后，对这个包含100笔数据的mini-batch求梯度，使用随机梯度下降法（SGD）更新参数。这里，梯度法的更新次数（循环的次数）为10000。每更新一次，都对训练数据计算损失函数的值，并把该值添加到数组中。用图像来表示这个孙书函数的值的推移。
 
+# 读入数据
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
 
 # 超参数
 iters_num = 10000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.1
-
 train_loss_list = []
 train_acc_list = []
 test_acc_list = []
+
 # 平均每个epoch的重复次数
 iter_per_epoch = max(train_size / batch_size, 1)
 
-network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
 for i in range(iters_num):
     # 获取mini-batch
@@ -31,8 +34,8 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 
     # 计算梯度
-    grad = network.numerical_gradient(x_batch, t_batch)
-    # grad = network.gradient(x_batch,t_batch) # 高速版
+    # grad = network.numerical_gradient(x_batch, t_batch)
+    grad = network.gradient(x_batch,t_batch) # 高速版 通过误差反向传播法求梯度
 
     # 更新参数
     for key in ('W1', 'b1', 'W2', 'b2'):

@@ -125,7 +125,7 @@ class TwoLayerNet:
 
     def predict(self, x):
         for layer in self.layers.values():
-            x = layer.forward()
+            x = layer.forward(x)
         return x
 
     # x: 输入数据， t: 监督数据
@@ -149,7 +149,7 @@ class TwoLayerNet:
                  'b2': numerical_gradient(loss_W, self.params['b2'])}
         return grads
 
-    def gradients(self, x, t):
+    def gradient(self, x, t):
         # forward
         self.loss(x, t)
 
@@ -169,7 +169,31 @@ class TwoLayerNet:
                  'b2': self.layers['Affine2'].db}
         return grads
 
+
 # OrderedDict 是有序字典，'有序'是指它可以记住字典里添加元素的顺序
 # 因此，神经网络的正向传输只需要按照添加元素的顺序调用各层的forward()方法即可
 # 而反向传输只需要按照相反的顺序调用各层的backward()方法即可
 # 因为Affine层和Relu层内部会正确处理正向传播和反向传播，所以这里所需要做的顺序就是正确地连接各层，再按照正序（或逆序）调用各层
+
+from dataset.mnist import load_mnist
+
+(x_train, t_trian), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+
+x_batch = x_train[:3]
+t_batch = t_trian[:3]
+grad_numerical = network.numerical_gradient(x_batch, t_batch)
+grad_backprop = network.gradient(x_batch, t_batch)
+
+# 求各个权重的绝对误差的平均值
+for key in grad_numerical.keys():
+    diff = np.average(grad_backprop[key] - grad_numerical[key])
+    print(key + ':' + str(diff))
+
+# W1:5.09154797300513e-11
+# b1:3.6390738422978873e-10
+# W2:-7.105431900408105e-14
+# b2:-1.2012613126444194e-10
+# 从这个结果可以看出，通过数值微分和误差反向传播法求出的梯度的差非常小
+
