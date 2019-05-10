@@ -1,4 +1,12 @@
 # coding: utf-8
+
+#  Copyright (c)
+#  projectName: nlpdoad        # filename : layers.py
+#  Author: weihangzhang         # email: hannah.zz@qq.com
+#  createDate : 2019/5/10 下午5:23
+#  lastModified: 2019/5/10 下午4:33
+#  desc:
+
 import numpy as np
 from common.functions import *
 from common.util import im2col, col2im
@@ -95,6 +103,18 @@ class SoftmaxWithLoss:
 class Dropout:
     """
     http://arxiv.org/abs/1207.0580
+    这里的要点是，每次正向传播时，self.mask都会以False形式保存要删除的神经元。
+    self.mask会随机生成和x形状相同的数组，并将值比drop_ration大的元素设为True。
+    反向传播时行为和ReLU相同。
+    也就是说，正向传播时传递了信号的神经元，反向传播时按原样传递信号；正向传播时没有传递信号神经元，反向传播时将信号停在那里。
+
+    机器中经常使用集成学习，所谓集成学习，就是让多个模型单独进行学习，推理时再去多个模型的输出的平均值。
+    用神经网络的语境来说，比如，准备五个结构相同（或者类似）的网络，分别进行学习，测试时，以这五个网络的输出的平均值作为答案。
+    实验告诉我们，通过进行集成学习，神经网络的识别精度可以提高好几个百分点。
+    这个集成学习与Dropout有密切的关系。
+    这是因为可以将Dropout理解为，通过在学习过程中随机删除神经元，从而每一次都让不同的模型进行学习。
+    并且，推理时，通过对神经元的输出×删除比例（比如，0.5等），可以获取模型的平均值。
+    也就是说，可以理解成，Dropout将集成学习的效果(模拟地)通过一个网络实现了。
     """
     def __init__(self, dropout_ratio=0.5):
         self.dropout_ratio = dropout_ratio
